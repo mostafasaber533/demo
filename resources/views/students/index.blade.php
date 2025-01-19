@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,6 +11,7 @@
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="mb-0">Students List</h5>
+            <a href="{{ route('students.create') }}" class="btn btn-primary">Add New Student</a>
         </div>
         <div class="card-body">
             @if(session('success'))
@@ -26,6 +26,7 @@
                         <th>Name</th>
                         <th>Email</th>
                         <th>Gender</th>
+                        <th>Track</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -36,6 +37,7 @@
                         <td>{{ $student->name }}</td>
                         <td>{{ $student->email }}</td>
                         <td>{{ ucfirst($student->gender) }}</td>
+                        <td>{{ $student->track->name }}</td>
                         <td>
                             <a href="{{ route('students.show', $student->id) }}" class="btn btn-sm btn-warning">View</a>
                             <form action="{{ route('students.destroy', $student->id) }}" method="POST" class="d-inline">
@@ -47,7 +49,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="5" class="text-center">No students found.</td>
+                        <td colspan="6" class="text-center">No students found.</td>
                     </tr>
                     @endforelse
                 </tbody>
