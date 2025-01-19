@@ -39,6 +39,11 @@ class TrackController extends Controller
         return redirect()->route('tracks.index')->with('success', 'Track created successfully.');
     }
 
+    public function show(Track $track)
+    {
+        return view('tracks.show', compact('track'));
+    }
+
     public function edit(Track $track)
     {
         return view('tracks.edit', compact('track'));
