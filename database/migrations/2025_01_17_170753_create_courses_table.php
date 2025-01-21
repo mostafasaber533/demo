@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name')->unique();
             $table->string('description')->nullable();
             $table->string('logo')->nullable();
+            $table->foreignId('track_id')->nullable()->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

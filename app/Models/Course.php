@@ -2,15 +2,22 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Course extends Model
 {
-    protected $fillable = ['name', 'description', 'logo'];
+    use HasFactory;
 
-    public function tracks(): BelongsToMany
+    protected $fillable = [
+        'name',
+        'description',
+        'logo',
+        'track_id'
+    ];
+
+    public function track()
     {
-        return $this->belongsToMany(Track::class);
+        return $this->belongsTo(Track::class);
     }
 }

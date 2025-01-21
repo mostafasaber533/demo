@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Track;
+use App\Models\Course;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -10,7 +11,7 @@ class TrackController extends Controller
 {
     public function index()
     {
-        $tracks = Track::all();
+        $tracks = Track::with(['courses', 'students'])->get();
         return view('tracks.index', compact('tracks'));
     }
 
@@ -41,6 +42,7 @@ class TrackController extends Controller
 
     public function show(Track $track)
     {
+        $track->load('courses');
         return view('tracks.show', compact('track'));
     }
 
@@ -81,5 +83,21 @@ class TrackController extends Controller
         $track->delete();
 
         return redirect()->route('tracks.index')->with('success', 'Track deleted successfully.');
+    }
+
+    // Add this method to manage courses in track
+    public function manageCourses(Track $track)
+    {
+        $courses = Course::all();
+        $track->load('courses');
+        return view('tracks.manage-courses', compact('track', 'courses'));
+    }
+
+    // Add this method to update track courses
+    public function updateCourses(Request $request, Track $track)
+    {
+        $track->courses()->sync($request->courses);
+        return redirect()->route('tracks.show', $track)
+            ->with('success', 'Track courses updated successfully');
     }
 }

@@ -1,30 +1,30 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <title>{{ $track->name }} - Details</title>
-</head>
-<body>
-<div class="container py-4">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <img src="{{ asset('images/'.$track->img) }}" class="card-img-top" alt="{{ $track->name }}" style="height: 300px; object-fit: cover;">
-                <div class="card-body">
-                    <h3 class="card-title">{{ $track->name }}</h3>
-                    <p class="card-text">{{ $track->description }}</p>
+<x-app-layout>
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-2xl font-bold mb-6">{{ $track->name }}</h1>
 
-                    <div class="mt-4">
-                        <a href="{{ route('tracks.index') }}" class="btn btn-secondary">Back to Tracks</a>
-                        <a href="{{ route('tracks.edit', $track) }}" class="btn btn-primary">Edit Track</a>
+        <div class="mb-6">
+            <h2 class="text-xl font-semibold mb-4">Track Details:</h2>
+            <div class="bg-white p-4 rounded-lg shadow">
+                <img src="{{ asset('images/' . $track->img) }}"
+                     alt="{{ $track->name }}"
+                     class="w-full h-32 object-cover rounded mb-4">
+                <p class="text-gray-600">{{ $track->description }}</p>
+            </div>
+        </div>
+
+        <div class="mb-6">
+            <h2 class="text-xl font-semibold mb-4">Courses in this Track:</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                @foreach($track->courses as $course)
+                    <div class="bg-white p-4 rounded-lg shadow">
+                        <img src="{{ asset('images/' . $course->logo) }}"
+                             alt="{{ $course->name }}"
+                             class="w-full h-32 object-cover rounded mb-4">
+                        <h3 class="font-semibold">{{ $course->name }}</h3>
+                        <p class="text-gray-600">{{ $course->description }}</p>
                     </div>
-                </div>
+                @endforeach
             </div>
         </div>
     </div>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+</x-app-layout>

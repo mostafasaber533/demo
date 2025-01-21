@@ -2,22 +2,25 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
-        // User::factory(10)->create();
+        Schema::disableForeignKeyConstraints();
+
+        // Clear existing data
+        collect(['students', 'courses', 'tracks'])->each(fn($table) => DB::table($table)->truncate());
 
         $this->call([
-            TrackSeeder::class,  // Must run first
-            StudentSeeder::class,
+            TrackSeeder::class,      // First create tracks
+            CourseSeeder::class,     // Then create courses
+            StudentSeeder::class,    // Finally create students
         ]);
+
+        Schema::enableForeignKeyConstraints();
     }
 }

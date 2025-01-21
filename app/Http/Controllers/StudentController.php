@@ -5,14 +5,27 @@ namespace App\Http\Controllers;
 use App\Models\Student;
 use App\Models\Track;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Artisan;
 
 class StudentController extends Controller
 {
     public function index()
     {
-        $students = Student::with('track')->get();
-        $tracks = Track::all();
-        return view('students.index', compact('students', 'tracks'));
+        if (!Schema::hasTable('students')) {
+            Artisan::call('db:seed', ['--class' => 'StudentSeeder']);
+            return redirect()->route('students.index')
+                ->with('success', 'Students table created and populated with data');
+        }
+
+        try {
+            $students = Student::with('track')->get();
+            $tracks = Track::all();
+            return view('students.index', compact('students', 'tracks'));
+        } catch (\Exception $e) {
+            return redirect()->route('students.index')
+                ->with('error', 'Error accessing students data. Table will be recreated.');
+        }
     }
 
     public function create()
