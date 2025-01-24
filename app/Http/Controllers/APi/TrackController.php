@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\TrackResource;
 use App\Models\Track;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class TrackController extends Controller
 {
@@ -26,9 +27,21 @@ class TrackController extends Controller
     public function store(Request $request)
     {
         //
-        $requestData=$request;
+        $courseValidator=Validator::make($request->all(),[
+            'name'=>'required',
+            'id'=>'unique:tracks'
+        ]);
+        if($courseValidator->fails()){
+            return response()->json([
+                'validation_errors' => $courseValidator->errors(),
+                'message'=> 'Check Your Data',
+                'typealart'=> 'danger'
+            ],422
+        );
+        }
+       /*  $requestData=$request;
         $track= Track::create($requestData);
-        return $track;
+        return $track; */
     }
 
     /**
@@ -60,6 +73,6 @@ class TrackController extends Controller
     {
         //
         $track->delete();
-        return "Course Deleted Successfully";
+        return "Track Deleted Successfully";
     }
 }
